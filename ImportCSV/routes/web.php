@@ -32,4 +32,4 @@ Route::get('import_candidates', 'CandidateController@importCandidateCSV');
 * Import csv jobs File
 *
 */
-Route::get('import_jobs', 'CandidateController@importCandidateCSV');
+Route::get('import_jobs', 'JobController@importJobCSV');

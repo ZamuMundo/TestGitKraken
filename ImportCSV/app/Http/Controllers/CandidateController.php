@@ -43,8 +43,7 @@ class CandidateController extends Controller
 
       }
 
-      dd($data);
-      //return $this->saveCandidate($data);
+      return $this->saveCandidate($data);
     }
 
     /**
@@ -58,7 +57,7 @@ class CandidateController extends Controller
 
         try {
 
-          return Candidate::insert($candidate);
+           Candidate::insert($candidate);
 
         } catch (\Exception $e) {
 

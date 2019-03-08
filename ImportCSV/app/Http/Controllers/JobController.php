@@ -53,4 +53,24 @@ class JobController extends Controller
       return $this->saveJob($data);
     }
 
+    /**
+   * save data new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  function saveJob($job)
+  {
+
+    try {
+
+      Job::insert($job);
+
+    } catch (\Exception $e) {
+
+      return $e;
+
+    }
+
+  }
+
 }
