@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Job;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class JobController extends Controller
 {
@@ -16,70 +17,40 @@ class JobController extends Controller
     {
         //
     }
-
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    *
+    * Import File CSV Jobs
+    * Save data in DB
+    *
+    */
+    public function importJobCSV()
     {
-        //
+      $path = public_path('storage/jobs.csv');
+
+      $lines = file($path);
+      $utf8_lines = array_map('utf8_encode', $lines);
+      $contents = array_map('str_getcsv', $utf8_lines);
+
+      $data = [];
+      foreach ($contents as $value) {
+
+        $data_start = str_replace ( '.' , '-' , $value[4]  );
+        $data_start  = Carbon::parse($data_start);
+
+        $data_finish = str_replace ( '.' , '-' , $value[5]  );
+        $data_finish  = Carbon::parse($data_finish);
+
+        $data[] = array(
+                        'candidate_id'    => $value[1],
+                        'title'           => $value[2],
+                        'company'         => $value[3],
+                        'data_start'      => $data_start,
+                        'data_finish'     => $data_finish,
+                      );
+        echo $value[1] . ' ' . $value[2] . ' ' . $value[3] . ' ' . $data_start . ' ' . $data_finish . '<br>';
+      }
+
+      return $this->saveJob($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Job $job)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Job $job)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Job $job)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Job  $job
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Job $job)
-    {
-        //
-    }
 }

@@ -14,72 +14,58 @@ class CandidateController extends Controller
      */
     public function index()
     {
-        //
-    }
+      $candidates = Candidate::get();
 
+      return view( 'candidates', [ 'candidates' => $candidates]);
+    }
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    *
+    * Import File CSV Candidates
+    * Save data in DB
+    *
+    */
+    function importCandidateCSV()
     {
-        //
+      $path = public_path('storage/candidates.csv');
+
+      $lines = file($path);
+      $utf8_lines = array_map('utf8_encode', $lines);
+      $contents = array_map('str_getcsv', $utf8_lines);
+
+      $data = [];
+      foreach ($contents as $value) {
+
+        $data[] = array(
+                        'name'        => $value[1],
+                        'last_name'   => $value[2],
+                        'email'       => $value[3],
+                      );
+
+      }
+
+      dd($data);
+      //return $this->saveCandidate($data);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  ARRAY $candidate
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+     function saveCandidate ($candidate)
     {
-        //
+
+        try {
+
+          return Candidate::insert($candidate);
+
+        } catch (\Exception $e) {
+
+          return $e;
+
+        }
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Candidate  $candidate
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Candidate $candidate)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Candidate  $candidate
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Candidate $candidate)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Candidate  $candidate
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Candidate $candidate)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Candidate  $candidate
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Candidate $candidate)
-    {
-        //
-    }
 }

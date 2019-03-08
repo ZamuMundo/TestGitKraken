@@ -14,3 +14,22 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/**
+* Route View candidates and Jobs
+*
+*/
+Route::get('candidates', 'CandidateController@index');
+
+Route::get('jobs', 'JobController@index');
+
+/**
+* Import csv candidates File
+*
+*/
+Route::get('import_candidates', 'CandidateController@importCandidateCSV');
+/**
+* Import csv jobs File
+*
+*/
+Route::get('import_jobs', 'CandidateController@importCandidateCSV');
